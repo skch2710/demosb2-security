@@ -1,0 +1,43 @@
+Spring Security:
+---------------------
+
+1. By adding spring security dependency all end-poits APIs are secured.
+2. by default username is "user" and password is - generate in console
+
+3. And if need to mention username and password in yml 
+	spring:
+  		security:
+    		user:
+      			name: your-username
+      			password: your-password
+    		roles: USER
+
+
+4. If you configure in username and password in config class as below 
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig{
+	
+	@Bean
+	BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	UserDetailsManager inMemoryUserDetailsManager() {
+		UserDetails user1 = User.withUsername("skch2710@gmail.com").password(passwordEncoder().encode("S@thi$+b27")).roles("USER").build();
+		UserDetails user2 = User.withUsername("my-user").password(passwordEncoder().encode("password")).roles("USER", "ADMIN").build();
+		return new InMemoryUserDetailsManager(user1, user2);
+	}
+
+}
