@@ -26,7 +26,7 @@ public class TestController {
 
 	@GetMapping("/test-user")
 //	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PreAuthorize("hasAnyAuthority('USER')")
+	@PreAuthorize("hasAnyAuthority('Super User')")
 	public ResponseEntity<?> testAdmin() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println(authentication.getAuthorities());

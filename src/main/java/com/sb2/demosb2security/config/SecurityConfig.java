@@ -24,6 +24,9 @@ public class SecurityConfig{
 	@Autowired
 	private CustomeUserDetailsManager customeUserDetailsManager;
 	
+	@Autowired
+	private CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint;
+	
 	@Bean
 	BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -67,8 +70,9 @@ public class SecurityConfig{
             .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
             .antMatchers("/api/public/**").permitAll()
             .anyRequest().authenticated()
-            .and().formLogin().and().httpBasic()
-            .and().csrf().disable(); // Disable CSRF protection
+            .and().formLogin().and()
+            .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(this.customBasicAuthenticationEntryPoint))
+            .csrf(csrf -> csrf.disable()); // Disable CSRF protection
 		return http.build();
 	}	
 }
